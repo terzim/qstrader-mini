@@ -1,4 +1,4 @@
-import httplib
+import http.client
 import urllib
 
 
@@ -10,7 +10,7 @@ class Execution(object):
         self.conn = self.obtain_connection()
 
     def obtain_connection(self):
-        return httplib.HTTPSConnection(self.domain)
+        return http.client.HTTPSConnection(self.domain)
 
     def execute_order(self, event):
         headers = {
@@ -29,4 +29,4 @@ class Execution(object):
             params, headers
         )
         response = self.conn.getresponse().read()
-        print response
+        print (response)
