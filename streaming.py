@@ -27,7 +27,7 @@ class StreamingForexPrices(object):
             return resp
         except Exception as e:
             s.close()
-            print "Caught exception when connecting to stream\n" + str(e)
+            print ("Caught exception when connecting to stream\n" + str(e))
 
     def stream_to_queue(self):
         response = self.connect_to_stream()
@@ -36,12 +36,13 @@ class StreamingForexPrices(object):
         for line in response.iter_lines(1):
             if line:
                 try:
-                    msg = json.loads(line)
+                    dline = line.decode('utf-8')
+                    msg = json.loads(dline)
                 except Exception as e:
-                    print "Caught exception when converting message into json\n" + str(e)
+                    print ("Caught exception when converting message into json\n" + str(e))
                     return
-                if msg.has_key("instrument") or msg.has_key("tick"):
-                    print msg
+                if "instrument" in msg or "tick" in msg:
+                    print (msg)
                     instrument = msg["tick"]["instrument"]
                     time = msg["tick"]["time"]
                     bid = msg["tick"]["bid"]
