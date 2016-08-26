@@ -4,8 +4,8 @@ import decimal
 from event import OrderEvent
 from statistics import mean
 
-D = decimal.Decimal
 decimal.getcontext().prec = 7
+D = decimal.Decimal
 
 class TestRandomStrategy(object):
     def __init__(self, instrument, units, events):
