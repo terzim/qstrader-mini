@@ -34,12 +34,13 @@ def trade(events, strategy, execution):
 
 if __name__ == "__main__":
     # heartbeat = 0.5  # Half a second between polling
-    heartbeat = 3  # Three seconds between polling
+    heartbeat = 0.5  # Three seconds between polling
     events = queue.Queue()
 
     # Trade 10000 units of EUR/USD
     instrument = "EUR_USD"
     units = 5
+    min_window = 20
 
     # Create the OANDA market price streaming class
     # making sure to provide authentication commands
@@ -54,7 +55,7 @@ if __name__ == "__main__":
 
     # Create the strategy/signal generator, passing the
     # instrument, quantity of units and the events queue
-    strategy = RSIStrategy(instrument, units, events)
+    strategy = RSIStrategy(instrument, units, events, min_window)
 
     # Create two separate threads: One for the trading loop
     # and another for the market price streaming class
