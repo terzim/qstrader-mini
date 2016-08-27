@@ -1,6 +1,7 @@
 import queue
 import threading
 import time
+import decimal
 
 from execution import Execution
 from settings import STREAM_DOMAIN, API_DOMAIN, ACCESS_TOKEN, ACCOUNT_ID
@@ -17,6 +18,7 @@ def trade(events, strategy, execution):
     continue.
     """
     while True:
+        decimal.getcontext().prec = 7
         try:
             event = events.get(False)
         except queue.Empty:
@@ -34,7 +36,7 @@ def trade(events, strategy, execution):
 
 if __name__ == "__main__":
     # heartbeat = 0.5  # Half a second between polling
-    heartbeat = 0.5  # Three seconds between polling
+    heartbeat = 0.5  # Half a seconds between polling
     events = queue.Queue()
 
     # Trade 10000 units of EUR/USD
