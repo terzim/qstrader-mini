@@ -27,6 +27,7 @@ def trade(events, strategy, execution):
             if event is not None:
                 if event.type == 'TICK':
                     strategy.pricelist(event)
+                    strategy.print_signals(event)
                     strategy.calculate_signals(event)
                 elif event.type == 'ORDER':
                     print("Executing order!")
@@ -43,6 +44,8 @@ if __name__ == "__main__":
     instrument = "EUR_USD"
     units = 5
     min_window = 20
+    rsisupboundary = 80
+    rsilowboundary = 20
 
     # Create the OANDA market price streaming class
     # making sure to provide authentication commands
@@ -57,7 +60,7 @@ if __name__ == "__main__":
 
     # Create the strategy/signal generator, passing the
     # instrument, quantity of units and the events queue
-    strategy = RSIStrategy(instrument, units, events, min_window)
+    strategy = RSIStrategy(instrument, units, events, min_window, rsilowboundary, rsisupboundary)
 
     # Create two separate threads: One for the trading loop
     # and another for the market price streaming class

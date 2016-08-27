@@ -26,7 +26,7 @@ class TestRandomStrategy(object):
 #define automonously a new strategy, called RSI
 
 class RSIStrategy(object):
-    def __init__(self, instrument, units, events, min_window = 40):
+    def __init__(self, instrument, units, events, min_window = 40, rsilowboundary = 20, rsiupboundary = 80):
         self.instrument = instrument
         self.units = units
         self.events = events
@@ -37,6 +37,7 @@ class RSIStrategy(object):
         self.meangains = []
         self.losses = []
         self.meanlosses = []
+        self.rsilist = []
 
     #append a price list to the RSI class. The price list
     #is formed with the avergae of "bid" and "ask" prices of every
@@ -96,22 +97,29 @@ class RSIStrategy(object):
     #finally, computes the RSI
     def RSI(self):
         rsi =  D(100 - (100/(1+self.RS())))
+        self.rsilist.append(rsi)
         return rsi
     
+    def print_signals(self,event):
+        if len(self.prices) >= (self.min_window + 1):
+            self.average_gain()
+            self.average_loss
+            self.RSI()
+            print(meangains[-1])
+            print(meanlosses[-1])
+            print(rsilist[-1])        
+
     #TODO: this will provide the conditions under which the RSI will execute the order
     def calculate_signals(self, event):
-        if len(self.prices) >= (self.min_window + 1):
-            print(self.average_gain())
-            print(self.average_loss())
-            print(self.RSI())
-
-        '''
-        if event.type == 'TICK':
-            self.ticks += 1
-            if self.ticks % 5 == 0:
-                side = random.choice(["buy", "sell"])
-                order = OrderEvent(
-                    self.instrument, self.units, "market", side
-                )
-                self.events.put(order)
-        '''
+        if len(self.rsilist) > self.min_window:
+            halfminwin = int(self.min_window/2)
+            quarterminwin = int(halfminwin/2)
+            lastrsiwindow = self.rsilist[-halfminwin:]
+            if all(x > self.rsiupboundary for x in lastrsiwindow[0:quarterminwin]):
+                if all(x < self.rsiupboundary for x in lastrsiwindow[-quarterminwin:]):
+                    order = OrderEvent(self.instrument, self.units, "market", "sell")
+                    self.events.put(order)
+            elif all(x < self.rsilowboundary for x in lastrsiwindow[0:quarterminwin]):
+                if all(x > self.rsilowboundary for x in lastrsiwindow[-quarterminwin:]):
+                    order = OrderEvent(self.instrument, self.units, "market", "buy")
+                    self.events.put(order)
