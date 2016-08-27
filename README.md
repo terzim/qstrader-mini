@@ -43,7 +43,7 @@ ACCOUNT_ID = Insert your account ID for OANDA (e.g. '1234567')
 * Launch the robot with: 
 
 ```
-python3 trading.py```
+python3 trading.py
 ```
 
 This project is constantly being developed, so unfortunately it is likely that it will encounter many issues along the way or may not work properly when installed on your machine.
@@ -52,7 +52,7 @@ If you have any questions about this please, or notice any bugs feel free to con
 
 # License Terms
 
-Copyright (c) 2015-2016 Michael Halls-Moore
+Copyright (c) 2015-2016 Michael Halls-Moore  
 Copyright (c) 2016 Massimiliano Terzi
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
