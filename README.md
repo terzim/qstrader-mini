@@ -4,11 +4,11 @@ badges will be added here
 
 A mini / lightweight FX trading robot for the OANDA API. Oanda is an FX and commodity broker.
 
-The code is based upon the dummy QSForex architecture, designed by Michael Halls-More in his blog series. The original article can be found  [here](https://www.quantstart.com/articles/Forex-Trading-Diary-1-Automated-Forex-Trading-with-the-OANDA-API)
+The code is based upon the dummy QSForex architecture, designed by Michael Halls-More in his blog series. The original article can be found  [here](https://www.quantstart.com/articles/Forex-Trading-Diary-1-Automated-Forex-Trading-with-the-OANDA-API).
 
-This extension implements the following custom trading strategies into the original architecture:
+This extension implements Python3 compatibility, and embeds the following custom trading strategies into the original architecture:
 
-* Relative Strenght Index
+* Relative Strength Index
 * others to follow
 
 # Important note 
