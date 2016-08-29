@@ -44,7 +44,7 @@ if __name__ == "__main__":
     instrument = "EUR_USD"
     units = 5
     min_window = 20
-    rsisupboundary = 80
+    rsiupboundary = 80
     rsilowboundary = 20
 
     # Create the OANDA market price streaming class
@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
     # Create the strategy/signal generator, passing the
     # instrument, quantity of units and the events queue
-    strategy = RSIStrategy(instrument, units, events, min_window, rsilowboundary, rsisupboundary)
+    strategy = RSIStrategy(instrument, units, events, min_window, rsilowboundary, rsiupboundary)
 
     # Create two separate threads: One for the trading loop
     # and another for the market price streaming class
