@@ -27,6 +27,7 @@ def trade(events, strategy, execution):
             if event is not None:
                 if event.type == 'TICK':
                     strategy.pricelist(event)
+                    strategy.gainsandlosses(event)
                     strategy.print_signals(event)
                     strategy.calculate_signals(event)
                 elif event.type == 'ORDER':
@@ -43,7 +44,7 @@ if __name__ == "__main__":
     # Trade 10000 units of EUR/USD
     instrument = "EUR_USD"
     units = 5
-    min_window = 20
+    min_window = 15
     rsiupboundary = 80
     rsilowboundary = 20
 

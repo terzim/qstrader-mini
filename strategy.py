@@ -42,26 +42,29 @@ class RSIStrategy(object):
         self.rsilist = []
 
     #append a price list to the RSI class. The price list
-    #is formed with the avergae of "bid" and "ask" prices of every
+    #is formed with the average of "bid" and "ask" prices of every
     #tick event
+    #also creates list of losses and gains
     #TODO: redefine the price list with an autonomous data handler class
     def pricelist(self,event):
         if event.type == 'TICK':
             self.ticks += 1
             self.prices.append(D((event.bid+event.ask)/2))
-        return self.prices
+            #return self.prices
+
+    def gainsandlosses(self,event):
+        if len(self.prices) >= 2:
+            if (self.prices[-1] - self.prices[-2]) <= 0:
+                self.gains.append(D(0))
+                self.losses.append(D(self.prices[-2] - self.prices[-1]))
+            else:
+                self.gains.append(D(self.prices[-1] - self.prices[-2]))
+                self.losses.append(D(0))
 
     #computes the average gain given the string of midprices
     #the first average gain is calculate with a simple average
     #the future average gains are rolling to smooth the RSI
-    #TODO: clean some mess with indexation
     def average_gain(self):
-        for x in range(1,len(self.prices)):
-            if (self.prices[x] - self.prices[x-1]) <= 0:
-                self.gains.append(D(0))
-            else:
-                self.gains.append(D(self.prices[x] - self.prices[x-1]))
-        
         if len(self.prices) == (self.min_window + 1):
             meangain = D(mean(self.gains))
             self.meangains.append(meangain)
@@ -75,12 +78,6 @@ class RSIStrategy(object):
     #computes the average loss given the string of midprices.
     #works the same as for the average gains
     def average_loss(self):
-        for x in range(1,len(self.prices)):
-            if (self.prices[x] - self.prices[x-1]) >= 0:
-                self.losses.append(D(0))
-            else:
-                self.losses.append(D(self.prices[x-1] - self.prices[x]))
-        
         if len(self.prices) == (self.min_window + 1):
             meanloss = D(mean(self.losses))
             self.meanlosses.append(meanloss)
@@ -91,25 +88,20 @@ class RSIStrategy(object):
             self.meanlosses.append(meanloss)
             return self.meanlosses[-1]
     
-    #computes the Relative Strenght given the string of prices
-    def RS(self):
-        rs = D(self.average_gain() / self.average_loss())
-        return rs    
-
-    #finally, computes the RSI
+    #computes the RSI
     def RSI(self):
-        rsi =  D(100 - (100/(1+self.RS())))
-        self.rsilist.append(rsi)
-        return rsi
+        rsi =  D(100 - (100/(1+(self.average_gain() / self.average_loss()))))
+        self.rsilist.append(rsi)        
+        return rsi    
     
     def print_signals(self,event):
         if len(self.prices) >= (self.min_window + 1):
-            self.average_gain()
-            self.average_loss()
             self.RSI()
-            print(self.meangains[-1])
-            print(self.meanlosses[-1])
-            print(self.rsilist[-1])        
+            print("Last 5 gains " + ', '.join(map(str, self.gains[-5:])))
+            print("Last 5 losses " + ', '.join(map(str, self.losses[-5:])))
+            #print("Last 5 meangains " + ', '.join(map(str, self.meangains[-5:])))
+            #print("Last 5 meanlosses " + ', '.join(map(str, self.meanlosses[-5:])))
+            print("Last 5 RSIs " + ', '.join(map(str, self.rsilist[-5:])))
 
     #TODO: this will provide the conditions under which the RSI will execute the order
     def calculate_signals(self, event):
