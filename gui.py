@@ -1,7 +1,7 @@
 """
 Mini GUI for the Trading ROBOT 
 """
-from setting import DOMAIN, ACCOUNT_ID, ACCESS_TOKEN
+from settings import DOMAIN, ACCOUNT_ID, ACCESS_TOKEN
 from tkinter import *
 import sys
 
