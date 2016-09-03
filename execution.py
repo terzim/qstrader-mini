@@ -17,7 +17,7 @@ class Execution(object):
             "Content-Type": "application/x-www-form-urlencoded",
             "Authorization": "Bearer " + self.access_token
         }
-        params = urllib.urlencode({
+        params = urllib.parse.urlencode({
             "instrument" : event.instrument,
             "units" : event.units,
             "type" : event.order_type,

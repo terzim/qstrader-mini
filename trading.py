@@ -1,6 +1,7 @@
 import queue
 import threading
 import time
+import decimal
 
 from execution import Execution
 from settings import STREAM_DOMAIN, API_DOMAIN, ACCESS_TOKEN, ACCOUNT_ID
@@ -17,6 +18,7 @@ def trade(events, strategy, execution):
     continue.
     """
     while True:
+        decimal.getcontext().prec = 7
         try:
             event = events.get(False)
         except queue.Empty:
@@ -25,6 +27,8 @@ def trade(events, strategy, execution):
             if event is not None:
                 if event.type == 'TICK':
                     strategy.pricelist(event)
+                    strategy.gainsandlosses(event)
+                    strategy.print_signals(event)
                     strategy.calculate_signals(event)
                 elif event.type == 'ORDER':
                     print("Executing order!")
@@ -34,12 +38,16 @@ def trade(events, strategy, execution):
 
 if __name__ == "__main__":
     # heartbeat = 0.5  # Half a second between polling
-    heartbeat = 3  # Three seconds between polling
+    heartbeat = 0.5  # Half a seconds between polling
     events = queue.Queue()
 
     # Trade 10000 units of EUR/USD
     instrument = "EUR_USD"
     units = 5
+    min_window = 15
+    persistence = 3
+    rsiupboundary = 80
+    rsilowboundary = 20
 
     # Create the OANDA market price streaming class
     # making sure to provide authentication commands
@@ -54,7 +62,7 @@ if __name__ == "__main__":
 
     # Create the strategy/signal generator, passing the
     # instrument, quantity of units and the events queue
-    strategy = RSIStrategy(instrument, units, events)
+    strategy = RSIStrategy(instrument, units, events, min_window, persistence, rsilowboundary, rsiupboundary)
 
     # Create two separate threads: One for the trading loop
     # and another for the market price streaming class
