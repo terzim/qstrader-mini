@@ -17,6 +17,7 @@ class StreamingForexPrices(object):
 
     def connect_to_stream(self):
         try:
+            requests.packages.urllib3.disable_warnings()
             s = requests.Session()
             url = "https://" + self.domain + "/v1/prices"
             headers = {'Authorization' : 'Bearer ' + self.access_token}
