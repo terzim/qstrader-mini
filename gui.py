@@ -1,7 +1,9 @@
 """
 Mini GUI for the Trading ROBOT 
 """
+from setting import DOMAIN, ACCOUNT_ID, ACCESS_TOKEN
 from tkinter import *
+import sys
 
 class GUI(Frame): 
 	def __init__(self, parent=None):
