@@ -6,7 +6,10 @@ from statistics import mean
 
 D = decimal.Decimal
 
-class TestRandomStrategy(object):
+class Strategy:
+    pass
+
+class TestRandomStrategy(Strategy):
     def __init__(self, instrument, units, events):
         self.instrument = instrument
         self.units = units
@@ -25,12 +28,13 @@ class TestRandomStrategy(object):
 
 #define automonously a new strategy, called RSI
 
-class RSIStrategy(object):
-    def __init__(self, instrument, units, events, min_window = 40, rsilowboundary = 20, rsiupboundary = 80):
+class RSIStrategy(Strategy):
+    def __init__(self, instrument, units, events, min_window = 40, persistence = 3, rsilowboundary = 20, rsiupboundary = 80):
         self.instrument = instrument
         self.units = units
         self.events = events
         self.min_window = min_window
+        self.persistence = persistence
         self.rsilowboundary = rsilowboundary
         self.rsiupboundary = rsiupboundary
         self.ticks = 0
@@ -112,14 +116,13 @@ class RSIStrategy(object):
             #halfminwin = int(self.min_window/2)
             #quarterminwin = int(halfminwin/2)
             #lastrsiwindow = self.rsilist[-halfminwin:]
-            if all(x > self.rsiupboundary for x in self.rsilist[-10:-3]):
-                if all(x < self.rsiupboundary for x in self.rsilist[-3:]):
-                    order = OrderEvent(self.instrument, self.units, ordertype, orderdirection[0])
-                    self.events.put(order)
-            elif all(x < self.rsilowboundary for x in self.rsilist[-10:-3]):
-                if all(x > self.rsilowboundary for x in self.rsilist[-3:]):
-                    order = OrderEvent(self.instrument, self.units, ordertype, orderdirection[1])
-                    self.events.put(order)
+            pers = int(self.persistence)
+            if all(x > self.rsiupboundary for x in self.rsilist[-pers:]):
+                order = OrderEvent(self.instrument, self.units, ordertype, orderdirection[0])
+                self.events.put(order)
+            elif all(x < self.rsilowboundary for x in self.rsilist[-pers:]):
+                order = OrderEvent(self.instrument, self.units, ordertype, orderdirection[1])
+                self.events.put(order)
             else:
                 pass
         else:
