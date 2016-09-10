@@ -28,9 +28,6 @@ class Execution(object):
             "/v1/accounts/%s/orders" % str(self.account_id),
             params, headers
         )
-        try:
-            response = self.conn.getresponse().read().decode("utf-8").replace("\n","").replace("\t","")
-        except:
-            print('error here!')
-            self.conn.close()
+        response = self.conn.getresponse().read().decode("utf-8").replace("\n","").replace("\t","")
         print (response)
+        self.conn.close()
