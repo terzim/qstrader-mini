@@ -15,7 +15,7 @@ class GUI(Frame):
 	def draw(self):
 		bottomframe = Frame(self.parent, relief=SUNKEN, bd=2)
 		bottomframe.pack(side=BOTTOM, fill = X)
-		Button(bottomframe, text='START Trading', command=()).pack(side=LEFT)
+		Button(bottomframe, text='START Trading', command=(lambda: self.parent.destroy())).pack(side=LEFT)
 		Button(bottomframe, text='STOP Trading', command=()).pack(side=LEFT)
 		Button(bottomframe, text='Fetch Entries', command=(lambda: self.fetch(self.variables))).pack(side=LEFT)
 		Button(bottomframe, text='Help?', command=()).pack(side=LEFT)
@@ -204,4 +204,6 @@ if __name__=='__main__':
 	root = Tk()
 	root.title("QSForex-mini by M.Terzi")
 	gui = GUI(root)
+	#method to extract gui variables
+	#print(gui.variables[1].get())
 	root.mainloop()

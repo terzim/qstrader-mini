@@ -30,3 +30,4 @@ class Execution(object):
         )
         response = self.conn.getresponse().read()
         print (response)
+        self.conn.close()
